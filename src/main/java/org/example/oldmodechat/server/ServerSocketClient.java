@@ -3,6 +3,7 @@ package org.example.oldmodechat.server;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
+import java.nio.ByteBuffer;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
 import java.nio.channels.spi.SelectorProvider;
@@ -13,8 +14,10 @@ public class ServerSocketClient extends Thread{
 
     private volatile ServerSocketChannel serverSocketChannel;
     /*
-    Crear un objeto credenciales y tambien para administrar el hilo
+    Crear un objeto credenciales y tambien para administrar el hilo y las sesiones
      */
+    public final static int DEFAULT_SIZE_BUFFER=1524;
+
 
     private boolean finish=false;
     public ServerSocketClient() {
@@ -25,6 +28,8 @@ public class ServerSocketClient extends Thread{
             e.printStackTrace();
         }
     }
+
+
 
     private ServerSocketChannel makeServerSocketChannel() throws IOException {
         final ServerSocketChannel serverSocketChannel=SelectorProvider.provider().openServerSocketChannel();
@@ -51,4 +56,6 @@ public class ServerSocketClient extends Thread{
 
         }
     }
+
+
 }

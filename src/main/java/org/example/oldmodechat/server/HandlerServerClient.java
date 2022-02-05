@@ -1,17 +1,17 @@
 package org.example.oldmodechat.server;
 
-import sun.awt.CharsetString;
-
 import java.io.*;
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
 
 
 public class HandlerServerClient implements Runnable{
-    public static final int SIZE_BUFFER=1000;
+    public static final int SIZE_BUFFER=1524;
     private final SocketChannel client;
+    private ByteBuffer byteBufferReader = getByteBufferReader();
+    private ByteBuffer byteBufferWriter=getByteBufferWriter();
     //private ThreadPoolExecutor threadPoolExecutor= (ThreadPoolExecutor) Executors.newSingleThreadExecutor();
-    private volatile BufferedReader reader=null;
+
     public HandlerServerClient(SocketChannel serverSocket) {
         this.client = serverSocket;
 
@@ -22,12 +22,10 @@ public class HandlerServerClient implements Runnable{
     public void run() {
 
         try {
-            while(!client.isConnected()){
-                final ByteBuffer buffer=ByteBuffer.allocate(SIZE_BUFFER);
-                buffer.asCharBuffer().append('a');
-                client.write(buffer);
+            while(client.isConnected()){
+                client.read(getByteBufferReader());
 
-                client.close();
+                System.out.println(getByteBufferReader().asCharBuffer());
 
             }
         }catch (IOException e){
@@ -36,7 +34,18 @@ public class HandlerServerClient implements Runnable{
 
     }
 
-    public synchronized BufferedReader getReader() {
-        return reader;
+    public synchronized ByteBuffer getByteBufferReader() {
+        if(byteBufferReader ==null){
+            byteBufferReader =ByteBuffer.allocate(SIZE_BUFFER);
+        }
+        return byteBufferReader;
+    }
+
+    public synchronized ByteBuffer getByteBufferWriter() {
+        if(byteBufferWriter==null){
+            byteBufferWriter=ByteBuffer.allocate(SIZE_BUFFER);
+        }
+
+        return byteBufferWriter;
     }
 }

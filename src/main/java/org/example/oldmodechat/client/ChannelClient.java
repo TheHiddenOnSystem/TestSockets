@@ -28,10 +28,8 @@ public class ChannelClient extends Thread{
             try {
 
                 ByteBuffer buffer= ByteBuffer.allocate(100);
-
-                socketChannel.read(buffer);
-                socketChannel.close();
-                System.out.println(buffer.asCharBuffer());
+                buffer.put(Byte.parseByte("10"));
+                socketChannel.write(buffer);
             } catch (IOException e) {
                 e.printStackTrace();
             }
