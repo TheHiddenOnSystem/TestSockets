@@ -18,6 +18,7 @@ public class ClientConnection {
     protected final SocketChannel socket;
     protected ByteBuffer readerBuffer =ByteBuffer.allocate(Max_BufferRangeSum);
     protected ByteBuffer writerBuffer =ByteBuffer.allocate(Max_BufferRangeSum);
+
     protected Session session=new Session();
 
     public ClientConnection(String nameFriend, String ip, String port) throws IOException {

@@ -2,6 +2,9 @@ package org.example.basicChat.interfaceuser;
 
 import java.awt.*;
 
+/**
+ * This panel is to look messages user, this is basic option
+ */
 public class PanelToReadChat extends Panel {
 
     private final StringBuffer stringBuffer=new StringBuffer();
@@ -20,10 +23,14 @@ public class PanelToReadChat extends Panel {
         //Utils.addobjects(textFieldRead,this,gridBagLayout,gridBagConstraints,1,0,5,1);
         //Utils.addobjects(scrollbarRead,this,gridBagLayout,gridBagConstraints,0,0,1,1);
     }
+
+    /**
+     *
+     * @return custom textArea
+     */
     private TextArea makeTexFieldRead(){
         TextArea textField=new TextArea();
         textField.setEditable(false);
-        textField.setText("asd");
         return textField;
     }
     public void updateTextFieldWithBuffer(){

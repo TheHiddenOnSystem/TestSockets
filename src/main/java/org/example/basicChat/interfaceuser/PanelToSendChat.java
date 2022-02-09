@@ -2,9 +2,10 @@ package org.example.basicChat.interfaceuser;
 
 import java.awt.*;
 
+/**
+ * This panel can send text with a socket, it is input
+ */
 public class PanelToSendChat extends Panel{
-
-
 
     private final TextArea textArea=new TextArea();
     private final Button btnSend=makeBtnSend();
@@ -17,6 +18,10 @@ public class PanelToSendChat extends Panel{
 
     }
 
+    /**
+     *
+     * @return Custom button
+     */
     private Button makeBtnSend(){
         final Button button=new Button("Enviar");
         button.setBackground(Color.GRAY);

@@ -11,6 +11,9 @@ import java.awt.event.WindowEvent;
 import java.io.IOException;
 import java.net.ServerSocket;
 
+/**
+ * This Class represent a Full Graphical Interface, but it doesnt be basic
+ */
 public class Gui extends JFrame {
     public static int HEIGHT=700;
     public static int WITHD=700;
@@ -32,6 +35,9 @@ public class Gui extends JFrame {
         }
     }
 
+    /**
+     * To run general config frame {@link JFrame}
+     */
     private void configFrame(){
         setSize(WITHD,HEIGHT);
         setVisible(true);
@@ -45,9 +51,17 @@ public class Gui extends JFrame {
         add(panelToRead,BorderLayout.CENTER);
         add(panelToSendChat,BorderLayout.SOUTH);
     }
+
+    /**
+     * To run panels general config
+     */
     private void secondaryConfig(){
         panelToSendChat.getBtnSend().addActionListener(actionListenerToBtnSend());
     }
+
+    /**
+     * @return Customization WindowAdaptor to this class
+     */
     private WindowAdapter windowAdapter(){
         return new WindowAdapter() {
             @Override
@@ -58,6 +72,9 @@ public class Gui extends JFrame {
         };
     }
 
+    /**
+     * @return Action to send Menssage with {@link ClientSocket}
+     */
     private ActionListener actionListenerToBtnSend(){
         return (l)->{
             try {

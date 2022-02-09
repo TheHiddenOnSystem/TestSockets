@@ -7,6 +7,9 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 
+/**
+ * This panel have all data config to get info to navigate
+ */
 public class PanelConfigDetails extends Panel{
     private static final String TITLE_CONNECT="Connected";
     private static final String TITLE_DESCONNECT="Desconnect";
@@ -30,10 +33,20 @@ public class PanelConfigDetails extends Panel{
         add(button);
         notConnected();
     }
+
+    /**
+     *
+     * @return TextField with custom options
+     */
     private TextField textField(){
         final TextField textField=new TextField();
         return textField;
     }
+
+    /**
+     *
+     * @return Action to button, with this action you can send one ping to get state server, and change color in a label
+     */
     private ActionListener actionListenerButtonConnect(){
         return new ActionListener() {
             @Override
@@ -64,9 +77,16 @@ public class PanelConfigDetails extends Panel{
             }
         };
     }
+
+    /**
+     * This other object can call to change background color at Green in a label
+     */
     public void isConnected(){
         lblconnected.setBackground(Color.GREEN);
     }
+    /**
+     * This other object can call to change background color at Red in a label
+     */
     public void notConnected(){
         lblconnected.setBackground(Color.RED);
     }
