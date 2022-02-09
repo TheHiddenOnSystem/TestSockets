@@ -1,6 +1,4 @@
-package org.example.oldmodechat.gui.connections.sockets;
-
-import org.example.oldmodechat.gui.connections.FuntionInterfaceServerSocketService;
+package org.example.oldmodechat.connections.sockets;
 
 import java.io.IOException;
 import java.nio.channels.ServerSocketChannel;
@@ -32,7 +30,7 @@ public class ServiceServerConnection extends Thread {
     private void configDefault(){
         do{
             try {
-                clientConnections.add(new SessionHandlerServer(this.serverSocketChannel.accept(),String.format("Client_%d",getClientConnections().size())));
+                clientConnections.add(new ClientConnection(this.serverSocketChannel.accept(),String.format("Client_%d",getClientConnections().size())));
             } catch (IOException e) {
                 e.printStackTrace();
             }

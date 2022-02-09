@@ -5,6 +5,12 @@ import java.net.Socket;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadPoolExecutor;
 
+/**
+ * This is one option get and use connection with client,
+ * server.accept()
+ * {@link java.net.ServerSocket}
+ * This is an example to handler petitions
+ */
 class HandlerToAcceptPettition extends Thread{
     private volatile Socket socket;
     private final ThreadPoolExecutor threadPoolExecutor=(ThreadPoolExecutor) Executors.newSingleThreadExecutor();
@@ -14,6 +20,10 @@ class HandlerToAcceptPettition extends Thread{
         this.socket=socket;
     }
 
+    /**
+     * Send Mensaje
+     * @param s
+     */
     public void sendMensaje(String s){
         if(notNullSocket()&&socket.isConnected()){
 
@@ -33,6 +43,9 @@ class HandlerToAcceptPettition extends Thread{
         }
     }
 
+    /**
+     * Thread
+     */
     @Override
     public void run() {
 

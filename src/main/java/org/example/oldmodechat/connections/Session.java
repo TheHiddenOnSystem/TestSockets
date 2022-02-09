@@ -1,4 +1,4 @@
-package org.example.oldmodechat.gui.connections;
+package org.example.oldmodechat.connections;
 
 import java.nio.ByteBuffer;
 import java.util.HashMap;

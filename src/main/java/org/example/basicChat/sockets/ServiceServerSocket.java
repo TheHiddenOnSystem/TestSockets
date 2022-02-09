@@ -8,6 +8,9 @@ import java.io.InputStreamReader;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+/**
+ * CustomService ServerSocket
+ */
 public class ServiceServerSocket extends Thread{
     private final ServerSocket serverSocket;
     private final PanelToReadChat panelToReadChat;

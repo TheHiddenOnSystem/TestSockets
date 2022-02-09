@@ -1,6 +1,6 @@
-package org.example.oldmodechat.gui.connections;
+package org.example.oldmodechat.connections;
 
-import org.example.oldmodechat.gui.connections.sockets.ServiceServerConnection;
+import org.example.oldmodechat.connections.sockets.ServiceServerConnection;
 import org.example.oldmodechat.util.CustomLogger;
 
 
@@ -13,6 +13,9 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.logging.Level;
 
+/**
+ * This is an administration ServiceConnection
+ */
 public class AdministrationServerConnections {
 
     private CustomLogger logger=new CustomLogger(AdministrationServerConnections.class.getName(),AdministrationServerConnections.class.getName());
@@ -28,11 +31,15 @@ public class AdministrationServerConnections {
 
     }
 
+    /**
+     * Configuration server connection
+     * @param port
+     */
     private void configServiceServerConnection(int port){
         try {
             final ServerSocketChannel serverSocketChannel= SelectorProvider.provider().openServerSocketChannel();
             serverSocketChannel.bind(new InetSocketAddress("localhost",port));
-            serviceServerConnection=new ServiceServerConnection(serverSocketChannel,null);
+            serviceServerConnection=new ServiceServerConnection(serverSocketChannel);
             serviceServerConnection.start();
         } catch (IOException e) {
             CustomLogger.Use_Log(logger.getLogger(),Level.INFO,"Error update service connection");
@@ -40,6 +47,9 @@ public class AdministrationServerConnections {
         }
     }
 
+    /**
+     * Configuration Logger
+     */
     private void configInitLogger(){
         try {
             //Config Info Handler config

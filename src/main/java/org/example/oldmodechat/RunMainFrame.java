@@ -1,7 +1,6 @@
 package org.example.oldmodechat;
 
-import org.example.oldmodechat.gui.MainFrame;
-import org.example.oldmodechat.gui.connections.AdministrationServerConnections;
+import org.example.oldmodechat.connections.AdministrationServerConnections;
 
 import java.io.FileNotFoundException;
 

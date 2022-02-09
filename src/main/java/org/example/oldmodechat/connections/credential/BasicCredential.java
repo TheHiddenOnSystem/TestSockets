@@ -1,9 +1,8 @@
-package org.example.oldmodechat.gui.connections;
+package org.example.oldmodechat.connections.credential;
 
-import java.net.InetAddress;
 import java.net.InetSocketAddress;
 
-public class BasicCredential {
+public class BasicCredential<T,K> {
     private String name;
     private InetSocketAddress inetSocketAddress;
 
