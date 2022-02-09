@@ -1,6 +1,6 @@
 package org.example.oldmodechat.connections.sockets;
 
-import org.example.oldmodechat.connections.Session;
+import org.example.oldmodechat.connections.session.Session;
 import org.example.oldmodechat.util.CustomLogger;
 
 import java.io.FileNotFoundException;

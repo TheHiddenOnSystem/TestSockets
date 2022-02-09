@@ -1,5 +1,10 @@
 package org.example.oldmodechat.connections.credential;
 
+/**
+ *
+ * @param <T>
+ * @param <K>
+ */
 public interface Credential<T,K> {
     /**
      * @return it is can "mary"
@@ -9,5 +14,5 @@ public interface Credential<T,K> {
     /**
      * @return it is can ip,token,etc..
      */
-    K getIdentifiquer();
+    K getIdentifier();
 }
