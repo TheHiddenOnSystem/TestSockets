@@ -1,6 +1,5 @@
 package org.example.oldmodechat.connections.sockets;
 
-import org.example.oldmodechat.connections.session.Session;
 import org.example.oldmodechat.util.CustomLogger;
 
 import java.io.FileNotFoundException;
@@ -22,7 +21,7 @@ public class ClientConnection {
     protected ByteBuffer readerBuffer =ByteBuffer.allocate(Max_BufferRangeSum);
     protected ByteBuffer writerBuffer =ByteBuffer.allocate(Max_BufferRangeSum);
 
-    protected Session session=new Session();
+
 
     /**
      * To simple client
@@ -82,7 +81,7 @@ public class ClientConnection {
     public void read(){
         try {
                 this.socket.read(readerBuffer);
-                this.session.add(Session.OptionSession.OTHER,readerBuffer);
+
         } catch (IOException e) {
             //e.printStackTrace();
             CustomLogger.Use_Log(logger.getLogger(),Level.INFO,"Error en byte buffer reader");
@@ -95,7 +94,7 @@ public class ClientConnection {
     public void write(){
         try {
             this.socket.write(writerBuffer);
-            this.session.add(Session.OptionSession.ME,writerBuffer);
+
         } catch (IOException e) {
             //e.printStackTrace();
             CustomLogger.Use_Log(logger.getLogger(),Level.INFO,"Error en byte buffer write");
@@ -112,9 +111,7 @@ public class ClientConnection {
         return socket;
     }
 
-    public Session getSession() {
-        return session;
-    }
+
 
     public ByteBuffer getReaderBuffer() {
         return readerBuffer;

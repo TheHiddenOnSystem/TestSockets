@@ -5,6 +5,8 @@ import java.net.InetAddress;
 /**
  * Default Credential
  *
+ * sample create Credential
+ *
  * example "paco",InetAddres(ip:...)
  *
  */
