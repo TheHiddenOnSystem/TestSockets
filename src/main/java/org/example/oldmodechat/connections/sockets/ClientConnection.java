@@ -4,9 +4,11 @@ import org.example.oldmodechat.util.CustomLogger;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
+import java.nio.channels.spi.SelectorProvider;
 import java.util.logging.Level;
 
 /**
@@ -30,9 +32,10 @@ public class ClientConnection {
      * @param port port
      * @throws IOException
      */
-    public ClientConnection(String nameFriend, String ip, String port) throws IOException {
+    public ClientConnection(String nameFriend, String ip, int port) throws IOException {
         logger=customLogger();
-        socket=new Socket(ip, Integer.parseInt(port)).getChannel();
+        socket= SelectorProvider.provider().openSocketChannel();
+        socket.connect(new InetSocketAddress(ip,port));
         this.nameFriend=nameFriend;
     }
 
@@ -62,7 +65,12 @@ public class ClientConnection {
     }
 
 
-
+    /**
+     * Typical ping with try connection
+     * @param ip ip
+     * @param port port
+     * @return if can connection return true
+     */
     public static boolean clientPingServer(String ip,String port){
         try {
             if(new Socket(ip, Integer.parseInt(port)).isConnected()){

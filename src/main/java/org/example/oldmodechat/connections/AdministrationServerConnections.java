@@ -19,7 +19,6 @@ import java.util.logging.Level;
 public class AdministrationServerConnections {
 
     private CustomLogger logger=new CustomLogger(AdministrationServerConnections.class.getName(),AdministrationServerConnections.class.getName());
-    private final ExecutorService threadPoolExecutor= Executors.newSingleThreadExecutor();
     private String ip="localhost";
     private ServiceServerConnection serviceServerConnection;
 
@@ -59,4 +58,7 @@ public class AdministrationServerConnections {
         }
     }
 
+    public ServiceServerConnection getServiceServerConnection() {
+        return serviceServerConnection;
+    }
 }

@@ -7,11 +7,6 @@ import java.io.FileNotFoundException;
 public class RunMainFrame {
     public static void main(String[] args) {
         //new MainFrame();
-        AdministrationServerConnections administrationServerConnections=null;
-        try {
-            administrationServerConnections=new AdministrationServerConnections(6000);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
+
     }
 }
