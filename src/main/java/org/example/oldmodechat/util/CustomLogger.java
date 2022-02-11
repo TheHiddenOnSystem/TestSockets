@@ -37,7 +37,7 @@ public class CustomLogger {
      *
      * @param logger object logger
      * @param level level to log
-     * @param msg mensage to log
+     * @param msg message to log
      * @return True if u write log and False if not write
      */
     public static boolean Use_Log(Logger logger,Level level,String msg){
