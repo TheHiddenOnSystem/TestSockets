@@ -1,4 +1,4 @@
-package org.example.oldmodechat.connections.menssaje;
+package org.example.utils.connection.menssaje;
 
 public enum ReferenceOptionsMessage {
     ME,OTHER

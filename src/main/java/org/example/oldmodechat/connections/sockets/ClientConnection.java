@@ -1,6 +1,10 @@
 package org.example.oldmodechat.connections.sockets;
 
 import org.example.oldmodechat.util.CustomLogger;
+import org.example.utils.connection.credential.ModelCredential;
+import org.example.utils.connection.menssaje.ModelMessage;
+import org.example.utils.connection.menssaje.ReferenceOptionsMessage;
+import org.example.utils.connection.session.ModelSession;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -9,19 +13,38 @@ import java.net.Socket;
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
 import java.nio.channels.spi.SelectorProvider;
+import java.util.Calendar;
 import java.util.logging.Level;
 
 /**
- * This has two options simple client, or handler to accept client
+ * This has two options simple client, or handler to accept client,
+ *
+ *
+ *
+ * Require Correction generic development in this class,
+ * if you write with other object can have a error
+ *
+ * @param <T> Is ModelSession
+ * @param <A> Is Type ModelMessage in ModelSession
+ * A solution to up error description
  */
-public class ClientConnection {
+public class ClientConnection<T extends ModelCredential,A extends ModelMessage> {
+    /**
+     * This class define a conditional option to two model,
+     * you can Use Buffers
+     */
+    public enum OptionBuffers{
+        ON,OFF
+    }
 
-    public static int Max_BufferRangeSum=1024;
+    /**
+     * you can change size option to make buffer
+     */
+    public static int MAX_MAKE_BUFFERS=1024;
     protected String nameFriend;
     protected CustomLogger logger;
     protected final SocketChannel socket;
-    protected ByteBuffer readerBuffer =ByteBuffer.allocate(Max_BufferRangeSum);
-    protected ByteBuffer writerBuffer =ByteBuffer.allocate(Max_BufferRangeSum);
+    protected final ModelSession<T,A> session;
 
 
 
@@ -30,23 +53,28 @@ public class ClientConnection {
      * @param nameFriend name
      * @param ip ip
      * @param port port
+
      * @throws IOException
      */
-    public ClientConnection(String nameFriend, String ip, int port) throws IOException {
+    public ClientConnection(String nameFriend, String ip, int port, ModelSession<T,A> session) throws IOException {
+
         logger=customLogger();
         socket= SelectorProvider.provider().openSocketChannel();
         socket.connect(new InetSocketAddress(ip,port));
         this.nameFriend=nameFriend;
+        this.session=session;
     }
 
     /**
-     * Handler to accept client with server
+     * Handler to accept client with server and other use
      * @param socket
      * @param nameFriend
+
      */
-    public ClientConnection(SocketChannel socket,String nameFriend) {
+    public ClientConnection(SocketChannel socket, String nameFriend, ModelSession<T,A> session) {
         this.socket = socket;
         logger=customLogger();
+        this.session=session;
     }
 
     /**
@@ -85,10 +113,16 @@ public class ClientConnection {
 
     /**
      * Read in buffer
+     *
      */
-    public void read(){
+    public void read(A msg){
         try {
-                this.socket.read(readerBuffer);
+            final ByteBuffer buffer=ByteBuffer.allocate(MAX_MAKE_BUFFERS);
+            this.socket.read(buffer);
+            msg.setDate(Calendar.getInstance().getTime());
+            msg.setMessage(nameFriend);
+            msg.setReferenceOptionsMessage(ReferenceOptionsMessage.OTHER);
+            session.getMessages().add(msg);
 
         } catch (IOException e) {
             //e.printStackTrace();
@@ -98,10 +132,17 @@ public class ClientConnection {
 
     /**
      * Write in buffer
+     *
+     *
+     * can have error in documentation this class, require revision
+     * @param msg
      */
-    public void write(){
+    public void write(A msg){
         try {
-            this.socket.write(writerBuffer);
+            final ByteBuffer buffer=ByteBuffer.allocate(1);
+            buffer.put(Byte.parseByte(msg.getMessage().toString()));
+            this.socket.write(buffer);
+            session.getMessages().add(msg);
 
         } catch (IOException e) {
             //e.printStackTrace();
@@ -120,12 +161,7 @@ public class ClientConnection {
     }
 
 
-
-    public ByteBuffer getReaderBuffer() {
-        return readerBuffer;
-    }
-
-    public ByteBuffer getWriterBuffer() {
-        return writerBuffer;
+    public ModelSession<T, A> getSession() {
+        return session;
     }
 }

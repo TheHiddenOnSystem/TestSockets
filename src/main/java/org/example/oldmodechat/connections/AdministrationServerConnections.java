@@ -2,6 +2,9 @@ package org.example.oldmodechat.connections;
 
 import org.example.oldmodechat.connections.sockets.ServiceServerConnection;
 import org.example.oldmodechat.util.CustomLogger;
+import org.example.utils.connection.credential.ModelCredential;
+import org.example.utils.connection.menssaje.ModelMessage;
+import org.example.utils.connection.session.ModelSession;
 
 
 import java.io.FileNotFoundException;
@@ -16,11 +19,11 @@ import java.util.logging.Level;
 /**
  * This is an administration ServiceConnection
  */
-public class AdministrationServerConnections {
+public class AdministrationServerConnections<T extends ModelCredential,A extends ModelMessage> {
 
     private CustomLogger logger=new CustomLogger(AdministrationServerConnections.class.getName(),AdministrationServerConnections.class.getName());
     private String ip="localhost";
-    private ServiceServerConnection serviceServerConnection;
+    private ServiceServerConnection<T,A> serviceServerConnection;
 
 
 

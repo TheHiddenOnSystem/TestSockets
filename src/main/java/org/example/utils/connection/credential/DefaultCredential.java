@@ -1,4 +1,4 @@
-package org.example.oldmodechat.connections.credential;
+package org.example.utils.connection.credential;
 
 import java.net.InetAddress;
 

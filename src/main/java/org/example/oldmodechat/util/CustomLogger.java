@@ -34,7 +34,6 @@ public class CustomLogger {
 
     /**
      * One Method to use log with validation
-     *
      * @param logger object logger
      * @param level level to log
      * @param msg message to log

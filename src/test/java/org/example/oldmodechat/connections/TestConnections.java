@@ -19,13 +19,7 @@ public class TestConnections {
     }
     @Test
     public void connectClient(){
-        try {
-            final SocketChannel socketChannel= SelectorProvider.provider().openSocketChannel();
-            socketChannel.connect(new InetSocketAddress("localhost",6000));
-            final ClientConnection clientConnection=new ClientConnection(socketChannel,"prueba");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+
 
     }
 
