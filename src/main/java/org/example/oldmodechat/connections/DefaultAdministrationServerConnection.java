@@ -16,9 +16,12 @@ import java.nio.channels.SocketChannel;
 import java.util.Calendar;
 
 public class DefaultAdministrationServerConnection extends AdministrationServerConnections<DefaultSession> {
-    private DefaultAdministrationServerConnection(int serverPort,FuntionInterfaceServerSocketService<DefaultSession> defaultSessionFuntionInterfaceServerSocketService) throws FileNotFoundException {
+    public DefaultAdministrationServerConnection(int serverPort,FuntionInterfaceServerSocketService<DefaultSession> defaultSessionFuntionInterfaceServerSocketService) throws FileNotFoundException {
         super(serverPort,defaultSessionFuntionInterfaceServerSocketService);
     }
+
+
+
     public static DefaultAdministrationServerConnection make(int serverPort) throws FileNotFoundException {
         return new DefaultAdministrationServerConnection(serverPort,defaultSessionFuntionInterfaceServerSocketService());
     }

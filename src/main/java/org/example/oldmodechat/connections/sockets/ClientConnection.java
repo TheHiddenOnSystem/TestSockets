@@ -24,7 +24,7 @@ public class ClientConnection<T extends ModelSession> {
 
     public static int Max_BufferRangeSum=1024;
     protected CustomLogger logger;
-    protected final SocketChannel socket;
+    protected SocketChannel socket;
     protected T session;
     protected final FuntionInterfaceClientRead<T> funtionInterfaceClientRead;
     protected final FuntionInterfaceClientWrite<T> funtionInterfaceClientWrite;
@@ -120,7 +120,15 @@ public class ClientConnection<T extends ModelSession> {
     }
 
 
+    public boolean resetConnection() throws IOException {
+        if(!getSocket().isConnected()){
+            socket=SelectorProvider.provider().openSocketChannel();
+            socket.connect(socket.getRemoteAddress());
+            return true;
+        }
 
+        return false;
+    }
 
     public SocketChannel getSocket() {
         return socket;
