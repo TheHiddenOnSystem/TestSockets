@@ -1,5 +1,9 @@
 package org.example.oldmodechat.connections.sockets;
 
+import org.example.oldmodechat.connections.menssaje.DefaultMessage;
+import org.example.oldmodechat.connections.menssaje.ReferenceOptionsMessage;
+import org.example.oldmodechat.connections.session.DefaultSession;
+import org.example.oldmodechat.connections.session.ModelSession;
 import org.example.oldmodechat.util.CustomLogger;
 
 import java.io.FileNotFoundException;
@@ -9,44 +13,62 @@ import java.net.Socket;
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
 import java.nio.channels.spi.SelectorProvider;
+import java.nio.charset.StandardCharsets;
+import java.util.Calendar;
 import java.util.logging.Level;
 
 /**
  * This has two options simple client, or handler to accept client
  */
-public class ClientConnection {
+public class ClientConnection<T extends ModelSession> {
 
     public static int Max_BufferRangeSum=1024;
-    protected String nameFriend;
     protected CustomLogger logger;
     protected final SocketChannel socket;
-    protected ByteBuffer readerBuffer =ByteBuffer.allocate(Max_BufferRangeSum);
-    protected ByteBuffer writerBuffer =ByteBuffer.allocate(Max_BufferRangeSum);
+    protected T session;
+    protected final FuntionInterfaceClientRead<T> funtionInterfaceClientRead;
+    protected final FuntionInterfaceClientWrite<T> funtionInterfaceClientWrite;
+
 
 
 
     /**
      * To simple client
-     * @param nameFriend name
      * @param ip ip
      * @param port port
+     * @param session
+     * @param funtionInterfaceClientRead
+     * @param funtionInterfaceClientWrite
+     * @param funtionInterfaceClientWrite
      * @throws IOException
      */
-    public ClientConnection(String nameFriend, String ip, int port) throws IOException {
+    public ClientConnection(String ip, int port, T session, FuntionInterfaceClientRead<T> funtionInterfaceClientRead, FuntionInterfaceClientWrite<T> funtionInterfaceClientWrite) throws IOException {
+        this.session = session;
+        this.funtionInterfaceClientRead = funtionInterfaceClientRead;
+        this.funtionInterfaceClientWrite = funtionInterfaceClientWrite;
+
         logger=customLogger();
         socket= SelectorProvider.provider().openSocketChannel();
         socket.connect(new InetSocketAddress(ip,port));
-        this.nameFriend=nameFriend;
     }
 
     /**
      * Handler to accept client with server
      * @param socket
-     * @param nameFriend
+     * @param session
+     * @param funtionInterfaceClientRead
+     * @param funtionInterfaceClientWrite
      */
-    public ClientConnection(SocketChannel socket,String nameFriend) {
+    public ClientConnection(SocketChannel socket, T session, FuntionInterfaceClientRead<T> funtionInterfaceClientRead, FuntionInterfaceClientWrite<T> funtionInterfaceClientWrite) {
         this.socket = socket;
+        this.session = session;
+        this.funtionInterfaceClientRead = funtionInterfaceClientRead;
+        this.funtionInterfaceClientWrite = funtionInterfaceClientWrite;
         logger=customLogger();
+    }
+
+    public T getSession() {
+        return session;
     }
 
     /**
@@ -83,49 +105,26 @@ public class ClientConnection {
         }
     }
 
-    /**
-     * Read in buffer
-     */
+
     public void read(){
-        try {
-                this.socket.read(readerBuffer);
-
-        } catch (IOException e) {
-            //e.printStackTrace();
-            CustomLogger.Use_Log(logger.getLogger(),Level.INFO,"Error en byte buffer reader");
-        }
+        funtionInterfaceClientRead.read(session,socket);
     }
 
-    /**
-     * Write in buffer
-     */
-    public void write(){
-        try {
-            this.socket.write(writerBuffer);
-
-        } catch (IOException e) {
-            //e.printStackTrace();
-            CustomLogger.Use_Log(logger.getLogger(),Level.INFO,"Error en byte buffer write");
-        }
+    public void write(ByteBuffer byteBuffer){
+        byteBuffer.flip();
+        funtionInterfaceClientWrite.write(socket,session,byteBuffer);
+    }
+    public void write(String msh){
+        final ByteBuffer buffer=ByteBuffer.wrap(msh.getBytes(StandardCharsets.UTF_8));
+        funtionInterfaceClientWrite.write(socket,session,buffer);
     }
 
 
 
-    public String getNameFriend() {
-        return nameFriend;
-    }
 
     public SocketChannel getSocket() {
         return socket;
     }
 
 
-
-    public ByteBuffer getReaderBuffer() {
-        return readerBuffer;
-    }
-
-    public ByteBuffer getWriterBuffer() {
-        return writerBuffer;
-    }
 }

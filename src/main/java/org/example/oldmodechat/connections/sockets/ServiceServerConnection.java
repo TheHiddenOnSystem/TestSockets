@@ -1,47 +1,59 @@
 package org.example.oldmodechat.connections.sockets;
 
+import org.example.oldmodechat.connections.session.ModelSession;
+
 import java.io.IOException;
 import java.nio.channels.ServerSocketChannel;
+import java.nio.channels.SocketChannel;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
-public class ServiceServerConnection extends Thread {
-    private volatile ServerSocketChannel serverSocketChannel;
-    private FuntionInterfaceServerSocketService funtionInterfaceServerSocketService=null;
-    private List<ClientConnection> clientConnections=null;
+/**
+ *
+ * @param <T> To Define Session to make wth clients
+ *
+ */
+public class ServiceServerConnection<T extends ModelSession> extends Thread {
+    protected volatile ServerSocketChannel serverSocketChannel;
+    protected FuntionInterfaceServerSocketService<T> funtionInterfaceServerSocketService=null;
+    protected List<ClientConnection<T>> clientConnections=new ArrayList<>();
 
     public ServiceServerConnection(ServerSocketChannel serverSocketChannel,FuntionInterfaceServerSocketService funtionInterfaceServerSocketService) {
         this.serverSocketChannel = serverSocketChannel;
         this.funtionInterfaceServerSocketService=funtionInterfaceServerSocketService;
     }
-    public ServiceServerConnection(ServerSocketChannel serverSocketChannel){
-        this.serverSocketChannel=serverSocketChannel;
-        clientConnections=new ArrayList<>();
-    }
+
 
     @Override
     public void run() {
         if(funtionInterfaceServerSocketService!=null){
-            funtionInterfaceServerSocketService.serviceServerCustom(getServerSocketChannel());
+            funtionInterfaceServerSocketService.serviceServerCustom(getServerSocketChannel(), getClientConnections());
         }else{
             configDefault();
         }
     }
+
+    /**
+     * !!!Don`t Use!!
+     * Config method run() default
+     */
     private void configDefault(){
-        do{
-            try {
-                clientConnections.add(new ClientConnection(this.serverSocketChannel.accept(),String.format("Client_%d",getClientConnections().size())));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }while(serverSocketChannel.isOpen());
+
+        try {
+            serverSocketChannel.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
-    public synchronized ServerSocketChannel getServerSocketChannel() {
+    public ServerSocketChannel getServerSocketChannel() {
         return serverSocketChannel;
     }
 
-    public List<ClientConnection> getClientConnections() {
+    public synchronized List<ClientConnection<T>> getClientConnections() {
         return clientConnections;
     }
+
+
 }

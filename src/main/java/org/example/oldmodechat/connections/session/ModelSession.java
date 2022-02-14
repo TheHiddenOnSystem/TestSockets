@@ -2,23 +2,40 @@ package org.example.oldmodechat.connections.session;
 
 import org.example.oldmodechat.connections.credential.Credential;
 import org.example.oldmodechat.connections.credential.ModelCredential;
+import org.example.oldmodechat.connections.menssaje.ModelMessage;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Model Session to create other Sessions
  *
  */
-public abstract class ModelSession<T extends ModelCredential> implements RequiredSession{
+public abstract class ModelSession<T extends ModelCredential,K extends ModelMessage> implements RequiredSession<T,K>{
 
-    protected final T credential;
+    protected T credential;
+    protected List<K> messages=new ArrayList<>();
 
-    protected ModelSession(T credential) {
-        this.credential=credential;
+    public ModelSession(T credential) {
+        this.credential = credential;
     }
 
+    @Override
+    public T getCredential() {
+        return credential;
+    }
 
     @Override
-    public Credential getCredential() {
-        return credential;
+    public List<K> getMessage() {
+        return messages;
+    }
+
+    @Override
+    public String toString() {
+        return "ModelSession{" +
+                "credential=" + credential +
+                ", messages=" + messages +
+                '}';
     }
 }
 

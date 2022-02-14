@@ -27,4 +27,13 @@ public abstract class ModelMessage <T> implements Message<T> {
     public ReferenceOptionsMessage getReferenceOptionsMessage() {
         return referenceOptionsMessage;
     }
+
+    @Override
+    public String toString() {
+        return "ModelMessage{" +
+                "date=" + date +
+                ", message=" + message +
+                ", referenceOptionsMessage=" + referenceOptionsMessage +
+                '}';
+    }
 }

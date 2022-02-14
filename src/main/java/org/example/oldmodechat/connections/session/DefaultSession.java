@@ -2,13 +2,14 @@ package org.example.oldmodechat.connections.session;
 
 import org.example.oldmodechat.connections.credential.DefaultCredential;
 import org.example.oldmodechat.connections.credential.ModelCredential;
+import org.example.oldmodechat.connections.menssaje.DefaultMessage;
 
 import java.net.InetAddress;
+import java.util.List;
 
-public class DefaultSession extends ModelSession<DefaultCredential> {
+public class DefaultSession extends ModelSession<DefaultCredential, DefaultMessage> {
 
-
-    protected DefaultSession(DefaultCredential credential) {
+    public DefaultSession(DefaultCredential credential) {
         super(credential);
     }
 }

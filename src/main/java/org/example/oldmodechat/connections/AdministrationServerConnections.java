@@ -1,6 +1,7 @@
 package org.example.oldmodechat.connections;
 
-import org.example.oldmodechat.connections.sockets.ServiceServerConnection;
+import org.example.oldmodechat.connections.session.ModelSession;
+import org.example.oldmodechat.connections.sockets.*;
 import org.example.oldmodechat.util.CustomLogger;
 
 
@@ -9,25 +10,24 @@ import java.io.IOException;
 import java.net.*;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.spi.SelectorProvider;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.logging.Level;
 
 /**
  * This is an administration ServiceConnection
  */
-public class AdministrationServerConnections {
+public abstract class AdministrationServerConnections<T extends ModelSession> {
 
-    private CustomLogger logger=new CustomLogger(AdministrationServerConnections.class.getName(),AdministrationServerConnections.class.getName());
-    private String ip="localhost";
-    private ServiceServerConnection serviceServerConnection;
+    private CustomLogger logger=new CustomLogger(AdministrationServerConnections.class.getName(), AdministrationServerConnections.class.getName());
+    protected ServiceServerConnection<T> serviceServerConnection;
+    protected final FuntionInterfaceServerSocketService<T> funtionInterfaceServerSocketService;
 
 
-
-    public AdministrationServerConnections(int serverPort) throws FileNotFoundException {
+    public AdministrationServerConnections(int serverPort, FuntionInterfaceServerSocketService<T> funtionInterfaceServerSocketService) throws FileNotFoundException {
+        this.funtionInterfaceServerSocketService = funtionInterfaceServerSocketService;
         configInitLogger();
         configServiceServerConnection(serverPort);
 
+        this.serviceServerConnection.start();
     }
 
     /**
@@ -36,15 +36,15 @@ public class AdministrationServerConnections {
      */
     private void configServiceServerConnection(int port){
         try {
-            final ServerSocketChannel serverSocketChannel= SelectorProvider.provider().openServerSocketChannel();
-            serverSocketChannel.bind(new InetSocketAddress("localhost",port));
-            serviceServerConnection=new ServiceServerConnection(serverSocketChannel);
-            serviceServerConnection.start();
+            final ServerSocketChannel serverSocketChannel=SelectorProvider.provider().openServerSocketChannel();
+            serverSocketChannel.bind(new InetSocketAddress(port));
+            this.serviceServerConnection=new ServiceServerConnection(serverSocketChannel,funtionInterfaceServerSocketService);
         } catch (IOException e) {
-            CustomLogger.Use_Log(logger.getLogger(),Level.INFO,"Error update service connection");
             e.printStackTrace();
         }
     }
+
+
 
     /**
      * Configuration Logger
@@ -58,7 +58,7 @@ public class AdministrationServerConnections {
         }
     }
 
-    public ServiceServerConnection getServiceServerConnection() {
+    public ServiceServerConnection<T> getServiceServerConnection() {
         return serviceServerConnection;
     }
 }
