@@ -19,7 +19,9 @@ public class TryRunClient {
         p1();
 
     }
-
+    /**
+     * This function run application with client defaultSession
+     */
     static void p1(){
         try {
             final SocketChannel socketChannel=SelectorProvider.provider().openSocketChannel();
@@ -41,6 +43,10 @@ public class TryRunClient {
         }
 
     }
+
+    /**
+     * This function run basic to try
+     */
     static void p2(){
         try {
             final SocketChannel socketChannel= SelectorProvider.provider().openSocketChannel();

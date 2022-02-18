@@ -21,6 +21,9 @@ public class TryRunServer {
         p1();
     }
 
+    /**
+     * This function run application with DefaultAdministrationServerConnection
+     */
     static void p1(){
         try {
             final DefaultAdministrationServerConnection administrationServerConnections=DefaultAdministrationServerConnection.make(6000);
@@ -36,6 +39,10 @@ public class TryRunServer {
             e.printStackTrace();
         }
     }
+
+    /**
+     * This function basic connection ServerSocketChannel to try
+     */
     static void p2(){
         try {
             final ServerSocketChannel serverSocketChannel= SelectorProvider.provider().openServerSocketChannel();
