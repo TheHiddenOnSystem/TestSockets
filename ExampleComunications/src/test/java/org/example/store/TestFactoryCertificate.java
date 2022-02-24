@@ -9,7 +9,7 @@ public class TestFactoryCertificate {
     }
 
     public static void main(String[] args) {
-        FactoryCertificate.genBasicCertificate("a");
+        FactorySecurity.genKeyPair("a");
 
     }
 }
