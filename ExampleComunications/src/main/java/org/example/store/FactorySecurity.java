@@ -1,15 +1,90 @@
 package org.example.store;
 
-import java.io.*;
-import java.security.KeyPair;
-import java.security.KeyPairGenerator;
-import java.security.NoSuchAlgorithmException;
+import javax.net.ssl.KeyManagerFactory;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManagerFactory;
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.security.*;
 import java.security.cert.Certificate;
 import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
-import java.security.cert.X509Certificate;
 
+/**
+ * This a configuration SSL to generate objects
+ *
+ * Reference Example properties:
+ *
+ * javax.net.ssl.trustStore="example"
+ * javax.netssl.trustStorePassword="example"
+ *
+ */
 public class FactorySecurity {
+
+
+    private KeyStore keyStore;
+    private SSLContext sslContext;
+    private KeyPairGenerator keyPairGenerator;
+
+
+    /**
+     *
+     * @param keyStore keystore certificates server
+     * @param passwd password keystore
+     * @param model SSL type mode
+     * @param keyPairGenerator can null
+     */
+    public FactorySecurity(KeyStore keyStore,String passwd,String model,KeyPairGenerator keyPairGenerator) {
+        this.keyStore = keyStore;
+        this.keyPairGenerator=keyPairGenerator;
+        sslContext=sslContext(keyStore,passwd,model,null);
+    }
+
+
+    public KeyStore getKeyStore() {
+        return keyStore;
+    }
+
+    public SSLContext getSslContext() {
+        return sslContext;
+    }
+
+    public KeyPairGenerator getKeyPairGenerator() {
+        return keyPairGenerator;
+    }
+
+
+    /**
+     * Generate SSLContext to use connections
+     * @param keyStore keyStore if load key
+     * @param passwd passwd keyStore
+     * @param modeSSL type algorithm SSLContext
+     * @param secureRandom can null
+     * @return SSLContext with init()
+     */
+    public static SSLContext sslContext(KeyStore keyStore,String passwd,String modeSSL,SecureRandom secureRandom){
+        SSLContext sslContext=null;
+        try {
+            final TrustManagerFactory trustManagerFactory=TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
+            trustManagerFactory.init(keyStore);
+            final KeyManagerFactory keyManagerFactory=KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
+            keyManagerFactory.init(keyStore,passwd.toCharArray());
+            sslContext=SSLContext.getInstance(modeSSL);
+            sslContext.init(keyManagerFactory.getKeyManagers(), trustManagerFactory.getTrustManagers(),secureRandom);
+
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (KeyStoreException e) {
+            e.printStackTrace();
+        } catch (UnrecoverableKeyException e) {
+            e.printStackTrace();
+        } catch (KeyManagementException e) {
+            e.printStackTrace();
+        }
+
+        return sslContext;
+    }
 
 
     public static KeyPair genKeyPair(String algorith){
@@ -17,6 +92,7 @@ public class FactorySecurity {
         KeyPair keyPair=null;
         try {
             KeyPairGenerator keyPairGenerator=KeyPairGenerator.getInstance(algorith);
+            keyPairGenerator.initialize(2048);
             keyPair=keyPairGenerator.genKeyPair();
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
@@ -24,47 +100,14 @@ public class FactorySecurity {
         return keyPair;
     }
 
-    public static X509Certificate makeCertificate(String path){
-        X509Certificate certificate=null;
-        final File file=new File(path);
-
+    public static Certificate genCertificate(PrivateKey privateKey){
+        Certificate certificate=null;
         try {
-            final FileInputStream fileInputStream=new FileInputStream(path);
             CertificateFactory certificateFactory=CertificateFactory.getInstance("X.509");
-            certificate= (X509Certificate) certificateFactory.generateCertificate(fileInputStream);
+            certificate=certificateFactory.generateCertificate(new ByteArrayInputStream(privateKey.getEncoded()));
         } catch (CertificateException e) {
-            e.printStackTrace();
-        } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
         return certificate;
-    }
-
-    public static void write(String path,byte[] msg){
-        File file=new File(path);
-        if(file.exists()){
-            file.delete();
-        }
-        try {
-            file.createNewFile();
-            FileWriter writer=new FileWriter(file);
-            for(byte a:msg){
-                writer.write(a);
-            }
-            writer.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-    }
-
-    public static void main(String[] args) {
-        KeyPair keyPair=genKeyPair("RSA");
-        write("privatekey",keyPair.getPrivate().getEncoded());
-        write("publicKey",keyPair.getPublic().getEncoded());
-        
-        System.out.println(new String(keyPair.getPrivate().getEncoded()));
-        System.out.println(new String(keyPair.getPublic().getEncoded()));
-
     }
 }
