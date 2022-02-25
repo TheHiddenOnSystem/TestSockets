@@ -1,0 +1,26 @@
+------------------------------------
+OPENSSL
+
+-clave privada
+
+openssl genrsa -out key.key 2048
+
+-clave privada y certificado
+
+openssl req -x509 -out CSR.csr -new -newkey rsa:2048 -nodes -keyout privateKey.key
+
+
+-clave publica
+
+openssl rsa -in privateKey.key -pubout -out publicKey.key
+
+--PKCS12 por si es java
+
+openssl pkcs12 -inkey privateKey.key -in CSR.csr -export -out CSR.pkcs12
+
+
+-------------------------------------------
+
+crear un almacen
+
+keytool -importkeystore -srckeystore CSR.pkcs12 -srcstoretype PKCS12 -destkeystore client.keystore -storepass "123456"
